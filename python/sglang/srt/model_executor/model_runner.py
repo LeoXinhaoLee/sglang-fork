@@ -454,7 +454,7 @@ class ModelRunner:
         if server_args.enable_deterministic_inference:
             from sglang.srt.batch_invariant_ops import enable_batch_invariant_mode
 
-            enable_batch_invariant_mode()
+            enable_batch_invariant_mode(server_args=server_args)
 
         # Init memory pool and attention backends
         self.init_memory_pool(

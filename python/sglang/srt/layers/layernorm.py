@@ -101,23 +101,32 @@ class RMSNorm(CustomOp):
         x: torch.Tensor,
         residual: Optional[torch.Tensor] = None,
     ) -> Union[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]]:
+        
         if self.variance_size_override is not None:
             return self.forward_native(x, residual)
+        
         if is_batch_invariant_mode_enabled():
+            # print(f'rl_on_policy_target: {get_global_server_args().rl_on_policy_target}')  # @xinhao: default: None
             if (
                 residual is not None
                 or get_global_server_args().rl_on_policy_target == "fsdp"
             ):
+                # print('Naive RMSNorm')
                 return self.forward_native(x, residual)
+            
+            # print('Triton RMSNorm')
             return rms_norm_batch_invariant(
                 x,
                 self.weight.data,
                 self.variance_epsilon,
             )
+        
         if residual is not None:
             fused_add_rmsnorm(x, residual, self.weight.data, self.variance_epsilon)
             return x, residual
+        
         out = rmsnorm(x, self.weight.data, self.variance_epsilon)
+        
         return out
 
     def forward_npu(

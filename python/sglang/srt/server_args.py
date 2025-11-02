@@ -539,6 +539,14 @@ class ServerArgs:
     pdmux_config_path: Optional[str] = None
     sm_group_num: int = 8
 
+    ## Custom batch-invariant ops path
+    batch_invariant_ops_dir: str = "python/sglang/srt/batch_invariant_ops"
+    batch_invariant_mm_folder: str = "sglang"
+    batch_invariant_addmm_folder: str = "sglang"
+    batch_invariant_log_softmax_folder: str = "sglang"
+    batch_invariant_mean_folder: str = "sglang"
+    batch_invariant_rms_folder: str = "sglang"
+
     def __post_init__(self):
         """
         Orchestrates the handling of various server arguments, ensuring proper configuration and validation.
@@ -1680,6 +1688,10 @@ class ServerArgs:
         )
         os.environ["SGLANG_ENABLE_DETERMINISTIC_INFERENCE"] = (
             "1" if self.enable_deterministic_inference else "0"
+        )
+        # @xinhao
+        os.environ["SGLANG_DETERMINISTIC_RMSNORM_PATH"] = (
+            self.batch_invariant_rms_folder
         )
 
     def _handle_cache_compatibility(self):
@@ -3509,6 +3521,40 @@ class ServerArgs:
             "--config",
             type=str,
             help="Read CLI options from a config file. Must be a YAML file with configuration options.",
+        )
+
+        ## Custom batch-invariant kernel path
+        parser.add_argument(
+            "--batch-invariant-ops-dir",
+            type=str,
+            default="python/sglang/srt/batch_invariant_ops",
+        )
+        parser.add_argument(
+            "--batch-invariant-mm-folder",
+            type=str,
+            # default="sglang",
+            default="deepgemm",
+        )
+        parser.add_argument(
+            "--batch-invariant-addmm-folder",
+            type=str,
+            # default="sglang",
+            default="deepgemm",
+        )
+        parser.add_argument(
+            "--batch-invariant-log-softmax-folder",
+            type=str,
+            default="sglang",
+        )
+        parser.add_argument(
+            "--batch-invariant-mean-folder",
+            type=str,
+            default="sglang",
+        )
+        parser.add_argument(
+            "--batch-invariant-rms-folder",
+            type=str,
+            default="sglang",
         )
 
     @classmethod
