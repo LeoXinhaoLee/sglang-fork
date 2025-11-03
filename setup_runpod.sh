@@ -1,15 +1,14 @@
 #!/bin/bash
 
 WORK_PATH=$(pwd)
-HOME_PATH="~"
+HOME_PATH="/root"
 cd ${HOME_PATH}
 
 if [[ ! -d ${HOME_PATH}/miniconda ]]; then
   wget https://repo.anaconda.com/miniconda/Miniconda3-py311_25.9.1-1-Linux-x86_64.sh &&
   bash Miniconda3-py311_25.9.1-1-Linux-x86_64.sh -b -p ${HOME_PATH}/miniconda
 fi
-${HOME_PATH}/miniconda/bin/conda init
-source ~/.bashrc
+source "${HOME_PATH}/miniconda/etc/profile.d/conda.sh"
 
 cd ${WORK_PATH}
 conda create -y -n sglang_fork python=3.11
