@@ -9,6 +9,8 @@ if [[ ! -d ${HOME_PATH}/miniconda ]]; then
   bash Miniconda3-py311_25.9.1-1-Linux-x86_64.sh -b -p ${HOME_PATH}/miniconda
 fi
 source "${HOME_PATH}/miniconda/etc/profile.d/conda.sh"
+conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
+conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
 
 cd ${WORK_PATH}
 conda create -y -n sglang_fork python=3.11
