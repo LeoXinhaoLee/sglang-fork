@@ -32,7 +32,11 @@ __all__ = [
 
 try:
     folder_name = os.getenv("SGLANG_DETERMINISTIC_RMSNORM_PATH", "sglang")
-    kernel_file = osp.join("./python/sglang/srt/batch_invariant_ops", "rms_norm", folder_name, "kernel.py")
+    kernel_dir = osp.join("./python/sglang/srt/batch_invariant_ops", "rms_norm", folder_name)
+    kernel_files = glob.glob(osp.join(kernel_dir, "*"))
+    kernel_files = [f for f in kernel_files if f.endswith((".py", ".so"))]
+    assert len(kernel_files) == 1
+    kernel_file = kernel_files[0]
     spec = importlib.util.spec_from_file_location(f"batch_invariant_rmsnorm", kernel_file)
     _mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(_mod)

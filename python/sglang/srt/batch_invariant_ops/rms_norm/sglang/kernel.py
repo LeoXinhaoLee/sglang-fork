@@ -2,6 +2,25 @@ import torch
 import triton
 import triton.language as tl
 
+# @xinhao debug
+import logging
+from pathlib import Path
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)  # set logger level
+log_path = Path("./stats_log/determinism_stats.log")
+log_path.parent.mkdir(parents=True, exist_ok=True)
+fh = logging.FileHandler(log_path, encoding="utf-8")
+fh.setLevel(logging.INFO)
+fh.setFormatter(logging.Formatter(
+    "%(message)s"
+))
+# Console handler
+ch = logging.StreamHandler()
+ch.setLevel(logging.INFO)
+ch.setFormatter(logging.Formatter("%(message)s"))
+if not logger.handlers:
+    logger.addHandler(fh)
+    logger.addHandler(ch)
 
 @triton.jit
 def _rms_norm_kernel(
@@ -121,4 +140,8 @@ def fn(
         RMS normalized tensor
     """
     # print('In Triton RMS')
+    # print(input.shape)
+    M, K = input.shape
+    f = f"M: {M}, K: {K}"
+    logger.info(f)
     return rms_norm(input, weight, eps=eps)
