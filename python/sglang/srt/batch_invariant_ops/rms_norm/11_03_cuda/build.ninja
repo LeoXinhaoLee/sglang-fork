@@ -27,8 +27,8 @@ rule cuda_compile
 rule link
   command = $cxx $in $ldflags -o $out
 
-build main.o: compile /lustre/fs1/portfolios/nvr/projects/nvr_lacr_llm/users/yusu/code/xh/sglang-fork/python/sglang/srt/batch_invariant_ops/rms_norm/11_01_cuda/main.cpp
-build cuda.cuda.o: cuda_compile /lustre/fs1/portfolios/nvr/projects/nvr_lacr_llm/users/yusu/code/xh/sglang-fork/python/sglang/srt/batch_invariant_ops/rms_norm/11_01_cuda/cuda.cu
+build main.o: compile /lustre/fs1/portfolios/nvr/projects/nvr_lacr_llm/users/yusu/code/xh/sglang-fork/python/sglang/srt/batch_invariant_ops/rms_norm/11_03_cuda/main.cpp
+build cuda.cuda.o: cuda_compile /lustre/fs1/portfolios/nvr/projects/nvr_lacr_llm/users/yusu/code/xh/sglang-fork/python/sglang/srt/batch_invariant_ops/rms_norm/11_03_cuda/cuda.cu
 
 
 
