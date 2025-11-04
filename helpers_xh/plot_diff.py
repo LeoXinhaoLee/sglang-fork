@@ -58,15 +58,16 @@ def load_npy(folder):
            decode_token_idx_all_req, decode_prob_all_req, decode_hidden_states_all_req
 
 
-folder = '10_28/normal/r128p512d512'
+folder = '11_03/normal/r32p256d256'
 prefill_token_idx_all_req_1, prefill_prob_all_req_1, prefill_hidden_states_all_req_1, \
 decode_token_idx_all_req_1, decode_prob_all_req_1, decode_hidden_states_all_req_1 = load_npy(folder)
 
-folder = '10_28/sglang_determ/r128p512d512'
+folder = '11_03/sglang/r32p256d256'
+# folder = '11_03/cuda_rms_2/r32p256d256'
 prefill_token_idx_all_req_2, prefill_prob_all_req_2, prefill_hidden_states_all_req_2, \
 decode_token_idx_all_req_2, decode_prob_all_req_2, decode_hidden_states_all_req_2 = load_npy(folder)
 
-folder = '10_28/our_triton_stride_determ_debug_plus_10/r128p512d512'
+folder = '11_03/cuda_rms/r32p256d256'
 prefill_token_idx_all_req_3, prefill_prob_all_req_3, prefill_hidden_states_all_req_3, \
 decode_token_idx_all_req_3, decode_prob_all_req_3, decode_hidden_states_all_req_3 = load_npy(folder)
 
@@ -105,7 +106,7 @@ diff_dict = {
     'decode_hidden_states_diff_13': decode_hidden_states_diff_13,
 }
 
-# folder_name = "10_28/diff_trace/r128p512d512"
+# folder_name = "11_03/diff_trace/r32p256d256"
 # os.makedirs(f'{folder_name}', mode=0o777, exist_ok=True)
 # np.savez_compressed(f"{folder_name}/diff_dict.npz", **diff_dict)
 # exit(0)

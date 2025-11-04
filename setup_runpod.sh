@@ -21,6 +21,6 @@ conda install -y -c conda-forge "cuda-toolkit=12.9"
 pip install flashinfer-python==0.4.1 flashinfer-cubin==0.4.1
 pip install flashinfer-jit-cache==0.4.1 --index-url https://flashinfer.ai/whl/cu129
 pip install nvidia-nvshmem-cu12==3.4.5
-pip install codetiming
+pip install codetiming matplotlib
 
 flashinfer show-config
