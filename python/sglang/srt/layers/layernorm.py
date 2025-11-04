@@ -113,6 +113,8 @@ class RMSNorm(CustomOp):
             ):
                 # print('Naive RMSNorm')
                 return self.forward_native(x, residual)
+                # fused_add_rmsnorm(x, residual, self.weight.data, self.variance_epsilon)  # @xinhao: debug upper bound
+                # return x, residual
             
             # print('Triton RMSNorm')
             return rms_norm_batch_invariant(
@@ -120,6 +122,7 @@ class RMSNorm(CustomOp):
                 self.weight.data,
                 self.variance_epsilon,
             )
+            # return rmsnorm(x, self.weight.data, self.variance_epsilon)  # @xinhao: debug upper bound
         
         if residual is not None:
             fused_add_rmsnorm(x, residual, self.weight.data, self.variance_epsilon)
