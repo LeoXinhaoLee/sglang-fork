@@ -1,3 +1,4 @@
+import os
 import subprocess
 import re
 import itertools
@@ -9,12 +10,11 @@ MODEL_PATH = "/workspace/.cache/huggingface/hub/models--Qwen--Qwen3-8B/snapshots
 
 # Parameters to vary
 # INPUT_OUTPUT_LENS = [(1024, 1024), (4096, 4096), (8192, 8192)]
-INPUT_OUTPUT_LENS = [(1024, 1024), (4096, 4096)]
+INPUT_OUTPUT_LENS = [(4096, 4096)]
 # INPUT_OUTPUT_LENS = [(1024, 1024)]
 # ATTN_BACKENDS = ["flashinfer", "fa3", "triton"]
-ATTN_BACKENDS = ["fa3", "triton"]
-# DETERMINISTIC_KERNEL = ["", "sglang", "10_25_triton"]
-DETERMINISTIC_KERNEL = ["sglang", "10_25_triton"]
+ATTN_BACKENDS = ["triton"]
+DETERMINISTIC_KERNEL = ["sglang", "11_04_cuda"]
 
 # Regex pattern to extract benchmark duration
 DURATION_PATTERN = re.compile(r"Benchmark duration \(s\):\s+([\d.]+)")
@@ -44,7 +44,8 @@ CMD_TEMPLATE_DETERMINISTIC = (
     "--attention-backend {backend} "
     "--disable-radix-cache "
     "--enable-deterministic-inference "
-    "--batch-invariant-mm-folder {kernel}"
+    "--batch-invariant-mm-folder sglang "
+    "--batch-invariant-rms-folder {kernel}"
 )
 
 results = []
@@ -86,10 +87,14 @@ for input_output_len in INPUT_OUTPUT_LENS:
                 results.append((backend, kernel, input_len, output_len, None))
 
 # Write results to TSV
-output_file = "offline_timing/time_all_results.tsv"
-with open(output_file, "w", newline="") as f:
+output_dir = "offline_timing"
+os.makedirs(output_dir, exist_ok=True)
+output_file = f"{output_dir}/time_all_results.tsv"
+write_header = os.path.exists(output_file)
+with open(output_file, "a", newline="") as f:
     writer = csv.writer(f, delimiter="\t")
-    writer.writerow(["backend", "kernel", "input len", "output len", "time"])
+    if write_header:
+        writer.writerow(["backend", "kernel", "input len", "output len", "time"])
     for backend, kernel, input_len, output_len, duration in results:
         if kernel == "":
             kernel = "normal"

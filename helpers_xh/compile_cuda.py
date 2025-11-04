@@ -29,7 +29,8 @@ if __name__ == "__main__":
     from codetiming import Timer
     name = "batch_invariant_rmsnorm"
     # code_path = "/lustre/fs1/portfolios/nvr/projects/nvr_lacr_llm/users/yusu/code/xh/sglang-fork/python/sglang/srt/batch_invariant_ops/rms_norm/11_03_cuda"
-    code_path = "/root/sglang-fork/python/sglang/srt/batch_invariant_ops/rms_norm/11_03_cuda"
+    # code_path = "/root/sglang-fork/python/sglang/srt/batch_invariant_ops/rms_norm/11_03_cuda"
+    code_path = "/root/sglang-fork/python/sglang/srt/batch_invariant_ops/rms_norm/11_04_cuda"
     with open(code_path + '/kernel.cu', 'r') as f:
         code = f.read()
     unique_id = str(uuid.uuid4())[:8]
